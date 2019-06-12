@@ -74,8 +74,8 @@ class TaskInvoker(object):
 
     def _validate_args(self, *args, **kwargs):
         func_defaults = self.function.__defaults__
-        raw_arguments = self.function.func_code.co_varnames
-        args_count = len(raw_arguments) - len(func_defaults or '')
+        raw_count = self.function.func_code.co_argcount
+        args_count = raw_count - len(func_defaults or '')
         if len(args) != args_count:
             raise TypeError('%s() takes at least %s arguments (%s given)' % (self.task_name, args_count, len(args)))
 

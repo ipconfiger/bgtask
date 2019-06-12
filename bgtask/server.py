@@ -40,7 +40,11 @@ class Server(object):
     def __init__(self):
         self.configuration = Configuration.instance()
 
-    def start(self):
+    def start(self, logging_level=logging.INFO):
+        logging.basicConfig(
+            level=logging_level,
+            format='%(asctime)s-%(filename)s[line:%(lineno)d]-%(levelname)s: %(message)s'
+        )
         try:
             queue = multiprocessing.Manager().Queue()
             pool = multiprocessing.Pool(processes=self.configuration.worker_count)
