@@ -28,9 +28,9 @@ def worker_proccess(queue, _number):
                 continue
             finally:
                 end_ts = time.time() * 1000
-            logging.info('proc_%s execute Task %s finished in %s\'s with return data: %s' % (_number,
+            logging.info('proc_%s execute Task %s finished in %d\'ms with return data: %s' % (_number,
                                                                                              currentTask.name,
-                                                                                             end_ts-start_ts,
+                                                                                             int(end_ts-start_ts),
                                                                                              return_data))
     except KeyboardInterrupt:
         pass
