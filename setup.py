@@ -18,7 +18,7 @@ Simple, Fast, Redis based background task manager""",
       include_package_data=True,
       zip_safe=True,
       install_requires=[
-          # -*- Extra requirements: -*-
+          'redis'
       ],
       entry_points="""
       # -*- Entry points: -*-
