@@ -22,21 +22,28 @@ class SingletonMixin(object):
 class RedisConnection(SingletonMixin):
     def __init__(self):
         self.redis = None
-        self.configuration = Configuration.instance()
+        self.host = None
+        self.port = None
+        self.queue_name = None
         self.connected = False
+
+    def init_redis(self, host, port, queue_name):
+        self.host = host
+        self.port = port
+        self.queue_name = queue_name
 
     def reconnect(self):
         if not self.connected:
-            self.redis = redis.StrictRedis(host=self.configuration.host, port=self.configuration.port)
+            self.redis = redis.StrictRedis(host=self.host, port=self.port)
             self.connected = True
 
     def waitfor(self):
         self.reconnect()
-        return self.redis.blpop(self.configuration.queue_name)
+        return self.redis.blpop(self.queue_name)
 
     def push_queue(self, value):
         self.reconnect()
-        self.redis.rpush(self.configuration.queue_name, value)
+        self.redis.rpush(self.queue_name, value)
 
 
 class Configuration(SingletonMixin):
@@ -83,6 +90,8 @@ class TaskInvoker(object):
         self._validate_args(*args, **kwargs)
         transfer = TaskTransfer.fromMethod(self.task_name, args, kwargs)
         conn = RedisConnection.instance()
+        configuration = Configuration.instance()
+        conn.init_redis(configuration.host, configuration.port, configuration.queue_name)
         data = str(transfer)
         conn.push_queue(data)
 

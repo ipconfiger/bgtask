@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 import sys, os
 
-version = '0.0.4'
+version = '0.1.0'
 
 setup(name='bgtask',
       version=version,
@@ -18,7 +18,8 @@ Simple, Fast, Redis based background task manager""",
       include_package_data=True,
       zip_safe=True,
       install_requires=[
-          'redis'
+          'redis',
+          'errorbuster'
       ],
       entry_points="""
       # -*- Entry points: -*-
